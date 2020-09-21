@@ -1,0 +1,151 @@
+:root {
+  --page-background: #E5E5E5;
+  --light-blue: #00AFDB;
+  --dark-blue: #009CC2;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.link-btn,
+.link-btn:visited {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 184px;
+  height: 46px;
+
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-align: center;
+  background-color: var(--light-blue);
+  color: white;
+}
+
+.link-btn:hover {
+  background-color: var(--dark-blue);
+}
+
+.visually-hidden {
+  position: absolute;
+  top: -99999px;
+  left: -99999px;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+}
+
+.page {
+  background-color: var(--page-background);
+  font-family: Roboto, sans-serif;
+  height: 101vh;
+}
+
+.page__inner {
+  width: 1600px;
+  height: 100vh;
+  margin: 0 auto;
+  /* background-color: black; */
+}
+
+.header {
+  background-color: #000000;
+}
+
+.site-nav__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 600px;
+  height: 95px;
+  margin: 0 auto;
+  list-style-type: none;
+}
+
+.site-nav__link,
+.site-nav__link:link,
+.site-nav__link:visited {
+  font-size: 14px;
+  font-weight: 300;
+  text-decoration: none;
+  color: #FFFFFF;
+  opacity: 0.8;
+  line-height: 140%;
+}
+
+.site-nav__link:active,
+.site-nav__link:hover,
+.site-nav__link.site-nav__link--active {
+  opacity: 1;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+.site-nav__link.site-nav__link--active {
+  font-weight: 400;
+}
+
+.site-nav__logo > .site-nav__link,
+.site-nav__logo > .site-nav__link:link {
+  border: none;
+  opacity: 1;
+}
+
+.your-life {
+  height: 744px;
+  background: url(assets/img/bg-image.png);
+  color: #FFFFFF;
+}
+
+.your-life__inner {
+  height: 644px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.your-life__heading {
+  margin-top: 133.5px;
+  margin-left: 4px;
+  font-size: 64px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 4.5px;
+}
+
+.your-life__subtext {
+  margin-top: 20px;
+  width: 30%;
+  text-align: center;
+  font-size: 18px;
+  /* font-weight: 100; */
+  line-height: 140%;
+  font-weight: 300;
+  letter-spacing: 0.1px;
+}
+
+.your-life__btn {
+  margin-top: 30px;
+}
+
+.your-life__socials {
+  margin-top: 183px;
+  width: 170px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.your-life__social-img {
+  height: 20px;
+  width: 20px;
+}
