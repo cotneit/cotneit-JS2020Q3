@@ -111,7 +111,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 }
 
 .your-life__heading {
@@ -128,7 +127,6 @@
   width: 30%;
   text-align: center;
   font-size: 18px;
-  /* font-weight: 100; */
   line-height: 140%;
   font-weight: 300;
   letter-spacing: 0.1px;
@@ -148,4 +146,40 @@
 .your-life__social-img {
   height: 20px;
   width: 20px;
+}
+
+.rappresent {
+  display: flex;
+  justify-content: space-between;
+  padding: 120px 269px 140px 269px;
+  background-color: #FFFFFF;
+}
+
+.rappresent__inner {
+  max-width: 407px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rappresent__heading {
+  margin-bottom: 20px;
+
+  color: #373737;
+  font-size: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.rappresent__text {
+  margin-bottom: 30px;
+  max-width: 407px;
+
+  color: #4E4E4E;
+  line-height: 145%;
+  font-size: 14px;
+}
+
+strong {
+  color: #373737;
 }
