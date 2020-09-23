@@ -17,8 +17,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 184px;
   height: 46px;
+  padding: 15px 47px;
 
   font-size: 14px;
   font-weight: bold;
@@ -27,10 +27,26 @@
   text-align: center;
   background-color: var(--light-blue);
   color: white;
+  border: none;
+  outline: none;
 }
 
 .link-btn:hover {
   background-color: var(--dark-blue);
+}
+
+.link-btn--check {
+  box-sizing: border-box;
+  padding: 0;
+  width: 66px;
+
+  background-image: url(assets/img/check-icon.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.link-btn--check:hover {
+  background-size: 16px;
 }
 
 .visually-hidden {
@@ -54,7 +70,6 @@
   width: 1600px;
   height: 100vh;
   margin: 0 auto;
-  /* background-color: black; */
 }
 
 .header {
@@ -160,6 +175,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .rappresent__heading {
@@ -271,6 +287,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
 }
 
 .implement__heading {
@@ -285,4 +302,37 @@
 .implement__text {
   margin-bottom: 30px;
   max-width: 407px;
+}
+
+.sign-up {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 524px;
+  background-image: url(assets/img/email-signup-bg.jpg);
+}
+
+.sign-up__heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  margin-top: -21px;
+}
+
+.sign-up__form {
+  display: flex;
+}
+
+.input {
+  height: 46px;
+  width: 340px;
+  padding: 13px 24px;
+  border: none;
+  color: rgba(55, 55, 55, 0.5);
+  font-size: 14px;
+  outline: none;
 }
