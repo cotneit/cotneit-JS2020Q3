@@ -186,7 +186,7 @@
   overflow: hidden;
 }
 
-.our-community__content {
+.our-community__inner {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -258,4 +258,32 @@
 .image-slider__arrow:hover {
   transform: scale(1.2);
   transition-duration: 0.1s;
+}
+
+.implement {
+  display: flex;
+  justify-content: space-between;
+  padding: 120px 378px 140px 269px;
+  background-color: #FFFFFF;
+}
+
+.implement__inner {
+  max-width: 407px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.implement__heading {
+  margin-bottom: 20px;
+
+  color: #373737;
+  font-size: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.implement__text {
+  margin-bottom: 30px;
+  max-width: 407px;
 }
