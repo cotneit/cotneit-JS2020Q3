@@ -11,15 +11,14 @@
 .page__inner {
   height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
 .calculator {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: minmax(120px, auto) repeat(5, 100px);
+  grid-template-columns: repeat(4, 110px);
+  grid-template-rows: minmax(120px, auto) repeat(6, 100px);
 
   font-family: 'Varela Round', sans-serif;
   font-size: 16px;
@@ -45,7 +44,7 @@
 
 .calculator__expression {
   color: #FFFFFF;
-  font-size: 2.5em;
+  font-size: 2.25em;
 }
 
 .calculator__button {
@@ -63,4 +62,8 @@
 
 .calculator__button--spancols--2 {
   grid-column: span 2;
+}
+
+.calculator__button--spanrows--2 {
+  grid-row: span 2;
 }

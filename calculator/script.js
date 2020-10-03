@@ -2,8 +2,7 @@ class Calculator {
   constructor(accumulator, expression) {
     this.accumulator = accumulator;
     this.expression = expression;
-    this.unaryOperators = ['√'];
-    this.unaryOperator = '';
+    this.unaryOperators = ['√', '+-'];
     this.clear();
   }
 
@@ -12,13 +11,13 @@ class Calculator {
     this.previousOperand = '';
     this.currentOperand = '';
     this.unaryOperator = '';
-    this.operator = undefined;
+    this.operator = '';
     this.updateScreen();
   }
 
   delete() {
     this.equalsPressed = false;
-    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+    this.currentOperand = this.currentOperand.slice(0, -1);
     this.updateScreen();
   }
 
@@ -30,7 +29,7 @@ class Calculator {
     if (number === '.' && this.currentOperand.includes('.')) {
       return;
     }
-    this.currentOperand += number;
+    this.currentOperand += number; // string concatenation
     this.updateScreen();
   }
 
@@ -38,12 +37,38 @@ class Calculator {
     this.equalsPressed = false;
 
     if (this.unaryOperators.includes(operator)) {
-      this.unaryOperator = operator;
+      let unaryOperator;
+
+      if (operator === '+-') {
+        unaryOperator = '-';
+      } else {
+        unaryOperator = operator;
+      }
+
+      if (this.unaryOperator === unaryOperator) {
+        this.unaryOperator = '';
+      } else {
+        this.unaryOperator = unaryOperator;
+      }
+
       this.updateScreen();
       return;
     }
 
-    this.previousOperand = this.evaluate();
+    if (this.currentOperand) {
+      this.previousOperand = this.evaluate();
+
+      // If there is an unary operator, it was added by this.evaluate() after the calculations.
+      // The only operator here is supposed to be minus (-).
+      if (this.unaryOperator) {
+        this.previousOperand = this.unaryOperator + this.previousOperand;
+        this.unaryOperator = '';
+      }
+    }
+
+    if (!this.previousOperand) {
+      this.previousOperand = 0;
+    }
 
     this.operator = operator;
     this.currentOperand = '';
@@ -59,7 +84,10 @@ class Calculator {
       case '√':
         result = Math.sqrt(current);
         current = result;
-        this.currentOperand = current;
+        break;
+      case '-':
+        result = -current;
+        current = result;
         break;
       default:
         break;
@@ -67,27 +95,53 @@ class Calculator {
 
     this.unaryOperator = '';
 
+    // Floating point math workaround. Far from perfect, but it's something.
+    // Using correction factors
+    // (multiply by a suitable power of 10 so that the arithmetic happens between integers)
+    // See https://0.30000000000000004.com/ to learn more about the problem
+    let decimalIndex;
+
+    decimalIndex = previous.toString().indexOf('.');
+    let previousFactor = 1;
+    if (decimalIndex !== -1) {
+      previousFactor = 10 ** (previous.toString().length - decimalIndex - 1);
+    }
+
+    decimalIndex = current.toString().indexOf('.');
+    let currentFactor = 1;
+    if (decimalIndex !== -1) {
+      currentFactor = 10 ** (current.toString().length - decimalIndex - 1);
+    }
+
+    const largestFactor = currentFactor >= previousFactor ? currentFactor : previousFactor;
     switch (this.operator) {
       case '+':
-        result = previous + current;
+        result = (largestFactor * previous + largestFactor * current) / largestFactor;
         break;
       case '-':
-        result = previous - current;
+        result = (largestFactor * previous - largestFactor * current) / largestFactor;
         break;
       case '*':
-        result = previous * current;
+        result = ((largestFactor * previous) * (largestFactor * current)) / largestFactor ** 2;
         break;
       case '÷':
-        result = previous / current;
+        result = current === 0 ? 'Cannot divide by zero' : (largestFactor * previous) / (largestFactor * current);
         break;
       case '^':
-        result = previous ** current;
+        result = (previousFactor * previous) ** current / (previousFactor ** current);
         break;
       default:
         break;
     }
 
     this.operator = '';
+
+    result = result.toString();
+
+    if (result[0] === '-') {
+      result = result.slice(1);
+      this.unaryOperator = '-';
+    }
 
     return result;
   }
@@ -96,16 +150,25 @@ class Calculator {
     const result = this.evaluate();
     this.currentOperand = result;
     this.previousOperand = '';
-    this.unaryOperator = '';
     this.updateScreen();
     this.equalsPressed = true;
   }
 
-  updateScreen() {
-    this.accumulator.innerText = this.previousOperand
-      ? `${this.previousOperand} ${this.operator || ''}` : '';
+  static normalize(number) {
+    const splitNumber = number.toString().split('.');
+    const integerPart = parseInt(splitNumber[0], 10);
+    if (integerPart) {
+      splitNumber[0] = integerPart.toLocaleString('en-US');
+    }
+    return splitNumber.join('.');
+  }
 
-    this.expression.innerText = `${this.unaryOperator}${this.currentOperand}`;
+  updateScreen() {
+    this.accumulator.innerText = `${Calculator.normalize(this.previousOperand)} ${this.operator}`;
+    this.expression.innerText = `${this.unaryOperator}${Calculator.normalize(this.currentOperand)}`;
+
+    // this.accumulator.innerText = `${this.previousOperand} ${this.operator}`;
+    // this.expression.innerText = `${this.unaryOperator}${this.currentOperand}`;
   }
 }
 
