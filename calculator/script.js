@@ -9,7 +9,7 @@ class Calculator {
   clear() {
     this.equalsPressed = false;
     this.previousOperand = '';
-    this.currentOperand = '';
+    this.currentOperand = '0';
     this.unaryOperator = '';
     this.operator = '';
     this.updateScreen();
@@ -17,7 +17,16 @@ class Calculator {
 
   delete() {
     this.equalsPressed = false;
-    this.currentOperand = this.currentOperand.slice(0, -1);
+    if (this.currentOperand === '0') {
+      return;
+    }
+
+    if (this.currentOperand.length === 1) {
+      this.currentOperand = '0';
+    } else {
+      this.currentOperand = this.currentOperand.slice(0, -1);
+    }
+
     this.updateScreen();
   }
 
@@ -26,9 +35,22 @@ class Calculator {
       this.clear();
       this.equalsPressed = false;
     }
+
     if (number === '.' && this.currentOperand.includes('.')) {
       return;
     }
+
+    if (this.currentOperand === '0') {
+      if (number === '0') {
+        return;
+      }
+      if (number !== '.') {
+        this.currentOperand = number;
+        this.updateScreen();
+        return;
+      }
+    }
+
     this.currentOperand += number; // string concatenation
     this.updateScreen();
   }
@@ -71,7 +93,7 @@ class Calculator {
     }
 
     this.operator = operator;
-    this.currentOperand = '';
+    this.currentOperand = '0';
     this.updateScreen();
   }
 
@@ -166,9 +188,6 @@ class Calculator {
   updateScreen() {
     this.accumulator.innerText = `${Calculator.normalize(this.previousOperand)} ${this.operator}`;
     this.expression.innerText = `${this.unaryOperator}${Calculator.normalize(this.currentOperand)}`;
-
-    // this.accumulator.innerText = `${this.previousOperand} ${this.operator}`;
-    // this.expression.innerText = `${this.unaryOperator}${this.currentOperand}`;
   }
 }
 
