@@ -17,12 +17,8 @@ class Calculator {
 
   delete() {
     this.equalsPressed = false;
-    if (this.currentOperand === '0') {
-      return;
-    }
-
-    if (this.currentOperand.length === 1) {
-      this.currentOperand = '0';
+    if (this.currentOperand.length === 0) {
+      this.unaryOperator = '';
     } else {
       this.currentOperand = this.currentOperand.slice(0, -1);
     }
@@ -38,6 +34,11 @@ class Calculator {
 
     if (number === '.' && this.currentOperand.includes('.')) {
       return;
+    }
+
+    // If the input is empty and '.' is pressed, append zero before appending dot
+    if (number === '.' && this.currentOperand === '') {
+      this.currentOperand = '0';
     }
 
     if (this.currentOperand === '0') {
@@ -89,11 +90,11 @@ class Calculator {
     }
 
     if (!this.previousOperand) {
-      this.previousOperand = 0;
+      this.previousOperand = '0';
     }
 
     this.operator = operator;
-    this.currentOperand = '0';
+    this.currentOperand = '';
     this.updateScreen();
   }
 
@@ -117,43 +118,46 @@ class Calculator {
 
     this.unaryOperator = '';
 
+    if (this.operator) {
     // Floating point math workaround. Far from perfect, but it's something.
     // Using correction factors
     // (multiply by a suitable power of 10 so that the arithmetic happens between integers)
     // See https://0.30000000000000004.com/ to learn more about the problem
-    let decimalIndex;
+      let decimalIndex;
 
-    decimalIndex = previous.toString().indexOf('.');
-    let previousFactor = 1;
-    if (decimalIndex !== -1) {
-      previousFactor = 10 ** (previous.toString().length - decimalIndex - 1);
-    }
+      decimalIndex = previous.toString().indexOf('.');
+      let previousFactor = 1;
+      if (decimalIndex !== -1) {
+        previousFactor = 10 ** (previous.toString().length - decimalIndex - 1);
+      }
 
-    decimalIndex = current.toString().indexOf('.');
-    let currentFactor = 1;
-    if (decimalIndex !== -1) {
-      currentFactor = 10 ** (current.toString().length - decimalIndex - 1);
-    }
+      decimalIndex = current.toString().indexOf('.');
+      let currentFactor = 1;
+      if (decimalIndex !== -1) {
+        currentFactor = 10 ** (current.toString().length - decimalIndex - 1);
+      }
 
-    const largestFactor = currentFactor >= previousFactor ? currentFactor : previousFactor;
-    switch (this.operator) {
-      case '+':
-        result = (largestFactor * previous + largestFactor * current) / largestFactor;
-        break;
-      case '-':
-        result = (largestFactor * previous - largestFactor * current) / largestFactor;
-        break;
-      case '*':
-        result = ((largestFactor * previous) * (largestFactor * current)) / largestFactor ** 2;
-        break;
-      case '÷':
-        result = current === 0 ? 'Cannot divide by zero' : (largestFactor * previous) / (largestFactor * current);
-        break;
-      case '^':
-        result = (previousFactor * previous) ** current / (previousFactor ** current);
-        break;
-      default:
-        break;
+      const largestFactor = currentFactor >= previousFactor ? currentFactor : previousFactor;
+
+      switch (this.operator) {
+        case '+':
+          result = (largestFactor * previous + largestFactor * current) / largestFactor;
+          break;
+        case '-':
+          result = (largestFactor * previous - largestFactor * current) / largestFactor;
+          break;
+        case '*':
+          result = ((largestFactor * previous) * (largestFactor * current)) / largestFactor ** 2;
+          break;
+        case '÷':
+          result = current === 0 ? 'Cannot divide by zero' : (largestFactor * previous) / (largestFactor * current);
+          break;
+        case '^':
+          result = (previousFactor * previous) ** current / (previousFactor ** current);
+          break;
+        default:
+          break;
+      }
     }
 
     this.operator = '';
@@ -170,7 +174,8 @@ class Calculator {
 
   equals() {
     const result = this.evaluate();
-    this.currentOperand = result;
+    // evaluate() returns NaN if the equals is pressed with operator and without current operand.
+    this.currentOperand = result === 'NaN' ? this.previousOperand : result;
     this.previousOperand = '';
     this.updateScreen();
     this.equalsPressed = true;
@@ -180,6 +185,7 @@ class Calculator {
     const splitNumber = number.toString().split('.');
     const integerPart = parseInt(splitNumber[0], 10);
     if (integerPart) {
+      // Split decimal part with dividers (commas in this case)
       splitNumber[0] = integerPart.toLocaleString('en-US');
     }
     return splitNumber.join('.');
