@@ -279,10 +279,15 @@ document.addEventListener('keydown', (event) => {
     case 'Escape':
       calculator.clear();
       break;
-    case 'm':
+    default:
+      break;
+  }
+
+  switch (event.code) {
+    case 'KeyM':
       calculator.setOperator('+-');
       break;
-    case 'r':
+    case 'KeyR':
       calculator.setOperator('√');
       break;
     default:
