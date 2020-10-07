@@ -244,3 +244,48 @@ deleteButton.addEventListener('click', () => {
 equalsButton.addEventListener('click', () => {
   calculator.equals();
 });
+
+document.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '.':
+      calculator.appendNumber(event.key);
+      break;
+    case '+':
+    case '-':
+    case '*':
+    case '^':
+      calculator.setOperator(event.key);
+      break;
+    case '/':
+      calculator.setOperator('÷');
+      break;
+    case 'Enter':
+      event.preventDefault();
+      calculator.equals();
+      break;
+    case 'Backspace':
+      calculator.delete();
+      break;
+    case 'Escape':
+      calculator.clear();
+      break;
+    case 'm':
+      calculator.setOperator('+-');
+      break;
+    case 'r':
+      calculator.setOperator('√');
+      break;
+    default:
+      break;
+  }
+});
