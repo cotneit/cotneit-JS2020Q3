@@ -80,6 +80,12 @@ class Calculator {
 
     if (this.currentOperand) {
       this.previousOperand = this.evaluate();
+      // Handle possible error message
+      if (this.previousOperand === 'Cannot divide by zero') {
+        this.currentOperand = '';
+        this.equals();
+        return;
+      }
 
       // If there is an unary operator, it was added by this.evaluate() after the calculations.
       // The only operator here is supposed to be minus (-).
@@ -101,7 +107,7 @@ class Calculator {
   evaluate() {
     const previous = parseFloat(this.previousOperand);
     let current = parseFloat(this.currentOperand);
-    let result = this.currentOperand;
+    let result = current;
 
     switch (this.unaryOperator) {
       case '√':
@@ -169,13 +175,21 @@ class Calculator {
       this.unaryOperator = '-';
     }
 
+    // NaN appears when equals() is invoked and currentOperand is empty ('').
+    // Asssign result to previousOperand since it will always be either ''
+    // or an operand that should become the result if currentOperand is empty.
+    // previousOperand can also contain an error message,
+    // which is handled before being displayed in setOperator() method
+    if (result === 'NaN') {
+      result = this.previousOperand;
+    }
+
     return result;
   }
 
   equals() {
     const result = this.evaluate();
-    // evaluate() returns NaN if the equals is pressed with operator and without current operand.
-    this.currentOperand = result === 'NaN' ? this.previousOperand : result;
+    this.currentOperand = result;
     this.previousOperand = '';
     this.updateScreen();
     this.equalsPressed = true;
@@ -229,4 +243,54 @@ deleteButton.addEventListener('click', () => {
 
 equalsButton.addEventListener('click', () => {
   calculator.equals();
+});
+
+document.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '.':
+      calculator.appendNumber(event.key);
+      break;
+    case '+':
+    case '-':
+    case '*':
+    case '^':
+      calculator.setOperator(event.key);
+      break;
+    case '/':
+      calculator.setOperator('÷');
+      break;
+    case 'Enter':
+      event.preventDefault();
+      calculator.equals();
+      break;
+    case 'Backspace':
+      calculator.delete();
+      break;
+    case 'Escape':
+      calculator.clear();
+      break;
+    default:
+      break;
+  }
+
+  switch (event.code) {
+    case 'KeyM':
+      calculator.setOperator('+-');
+      break;
+    case 'KeyR':
+      calculator.setOperator('√');
+      break;
+    default:
+      break;
+  }
 });
