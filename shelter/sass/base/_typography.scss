@@ -1,0 +1,65 @@
+.heading {
+  margin: 0;
+  font-family: $ff-primary;
+  font-weight: normal;
+  color: $color-dark-l;
+
+  &--2 {
+    line-height: 1.3;
+    letter-spacing: 0;
+    font-size: 44px;
+    color: $color-light-xl;
+  }
+
+  &--3 {
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    font-size: 35px;
+  
+    @media screen and (max-width: 767px) {
+      font-size: 25px;
+    }
+  }
+
+  &--4 {
+    line-height: 1.15;
+    letter-spacing: 0.06em;
+    font-size: 20px;
+  }
+
+  &--5 {
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    font-size: 15px;
+  }
+
+  &--hidden {
+    position: absolute; 
+    overflow: hidden; 
+    clip: rect(0 0 0 0); 
+    height: 1px; 
+    width: 1px; 
+    margin: -1px; 
+    padding: 0; 
+    border: 0; 
+  }
+}
+
+.paragraph {
+  margin: 0;
+  font-family: $ff-secondary;
+  font-weight: normal;
+  color: $color-dark-xl;
+
+  &--l {
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  &--s {
+    font-style: italic;
+    line-height: 1.5;
+    font-size: 12px;
+    color: $color-dark-m;
+  }
+}

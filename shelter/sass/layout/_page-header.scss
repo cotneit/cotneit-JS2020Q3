@@ -1,0 +1,29 @@
+.page-header {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 30px 40px;
+
+  @media screen and (max-width: 1279px) {
+    padding: 30px;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 30px 10px;
+  }
+
+  &--main-page {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background: transparent;
+
+    @media screen and (max-width: 1279px) {
+      top: 0;
+    }
+  }
+
+  background-color: $color-light-xl;
+}

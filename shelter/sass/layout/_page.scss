@@ -1,0 +1,10 @@
+.page {
+  background-color: $site-background;
+  height: 101vh;
+
+  &__inner {
+    max-width: 1280px;
+    margin: auto;
+    position: relative;
+  }
+}
