@@ -1,0 +1,25 @@
+.button {
+  box-sizing: border-box;
+  width: fit-content;
+  margin: 0;
+  padding: 15px 45px;
+  border-radius: 100px;
+  background-color: $color-primary;
+
+  text-decoration: none;
+  color: $color-dark-3xl;
+  font-family: $ff-primary;
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+
+  &:hover {
+    box-shadow: none;
+    background-color: $color-primary-light;
+  }
+
+  &--hollow {
+    box-shadow: inset 0 0 0 2px $color-primary;
+    background-color: transparent;
+  }
+}

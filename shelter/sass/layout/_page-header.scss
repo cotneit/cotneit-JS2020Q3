@@ -6,11 +6,23 @@
   justify-content: space-between;
   padding: 30px 40px;
 
+  @media screen and (max-width: 1279px) {
+    padding: 30px;
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 30px 10px;
+  }
+
   &--main-page {
     position: absolute;
     top: 30px;
     left: 0;
-    background-color: #5B483A;
+    background: transparent;
+
+    @media screen and (max-width: 1279px) {
+      top: 0;
+    }
   }
 
   background-color: $color-light-xl;

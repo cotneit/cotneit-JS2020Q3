@@ -3,8 +3,12 @@
 @import "base/typography";
 
 @import "components/logo";
+@import "components/button";
+@import "components/hamburger";
 @import "components/site-nav";
 
 
 @import "layout/page";
-@import "layout/page-header"
+@import "layout/page-header";
+@import "layout/section";
+@import "layout/hero";
