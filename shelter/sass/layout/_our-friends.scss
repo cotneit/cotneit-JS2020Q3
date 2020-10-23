@@ -1,0 +1,14 @@
+.our-friends {
+  @include section-padding;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  &__heading {
+    @include h3;
+
+    text-align: center;
+  }
+}

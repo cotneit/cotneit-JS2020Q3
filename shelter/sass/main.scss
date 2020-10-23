@@ -1,14 +1,16 @@
 @import "abstracts/variables";
-
-@import "base/typography";
+@import "abstracts/mixins";
 
 @import "components/logo";
 @import "components/button";
 @import "components/hamburger";
 @import "components/site-nav";
-
+@import "components/pet-card";
+@import "components/slider";
 
 @import "layout/page";
 @import "layout/page-header";
-@import "layout/section";
 @import "layout/hero";
+@import "layout/about-shelter";
+@import "layout/our-friends";
+
