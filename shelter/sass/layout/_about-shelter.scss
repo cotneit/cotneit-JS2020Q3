@@ -1,0 +1,62 @@
+.about-shelter {
+  @include section-padding;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1279px) {
+    flex-direction: column-reverse;
+  }
+
+  &__inner {
+    max-width: 430px;
+    margin-left: 120px;
+
+    @media screen and (max-width: 1279px) {
+      margin-left: 0px;
+    }
+
+    @media screen and (max-width: 767px) {
+      padding: 0 15px;
+    }
+  }
+
+  &__heading {
+    @include h3;
+
+    max-width: 370px;
+    margin-bottom: 25px;
+
+    @media screen and (max-width: 767px) {
+      text-align: center;
+    }
+  }
+
+  &__text {
+    @include paragraph-l;
+
+    margin-bottom: 25px;
+
+    @media screen and (max-width: 767px) {
+      text-align: justify;
+      margin-bottom: 22px;
+    }
+
+    &:nth-last-child(1) {
+      margin-bottom: 0;
+    }
+  }
+
+  &__image {
+    @media screen and (max-width: 1279px) {
+      margin-top: 80px;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-top: 42px;
+      width: 260px;
+    }
+  }
+}

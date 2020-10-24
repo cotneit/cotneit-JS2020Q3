@@ -1,0 +1,27 @@
+.our-friends {
+  @include section-padding;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__heading {
+    @include h3;
+
+    margin-bottom: 60px;
+    text-align: center;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 42px
+    }
+  }
+
+  &__slider {
+    margin-bottom: 60px;
+
+    @media screen and (max-width: 767px) {
+      margin-bottom: 42px;
+    }
+  }
+}
