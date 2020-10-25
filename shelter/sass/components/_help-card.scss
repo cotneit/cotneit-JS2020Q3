@@ -1,0 +1,35 @@
+.help-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 113px;
+
+  @media screen and (max-width: 1279px) {
+    width: 170px;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 130px;
+    height: 87px;
+  }
+
+  &__image {
+    height: 60px;
+    width: 60px;
+
+    @media screen and (max-width: 767px) {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__title {
+    @include h4;
+
+    @media screen and (max-width: 767px) {
+      @include h5;
+    }
+  }
+}
