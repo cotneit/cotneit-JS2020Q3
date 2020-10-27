@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: $color-light-l;
 
   &__heading {
     @include h3;

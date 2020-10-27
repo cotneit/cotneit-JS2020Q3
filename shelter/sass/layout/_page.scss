@@ -7,13 +7,5 @@
     margin: auto;
     position: relative;
     background-color: $color-light-xl;
-
-    & > *:nth-child(2n + 1) {
-      background-color: transparent;
-    }
-
-    & > *:nth-child(2n) {
-      background-color: $color-light-l;
-    }
   }
 }
