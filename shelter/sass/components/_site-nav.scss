@@ -47,9 +47,18 @@
       color: $color-dark-3xl;
       border-bottom: 3px solid $color-primary;
     }
+
+    &--disabled {
+      cursor: default;
+
+      &:hover {
+        color: $color-dark-l;
+      }
+    }
   }
 
   &__link {
+    margin: 0;
     text-decoration: none;
     color: inherit;
     font-size: 15px;
@@ -77,6 +86,12 @@
 
     &--active {
       color: $color-light-s;
+    }
+
+    &--disabled {
+      &:hover {
+        color: $color-dark-s;
+      }
     }
   }
 }
