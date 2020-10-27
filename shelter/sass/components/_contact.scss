@@ -1,0 +1,10 @@
+.contact {
+  @include h4($color-primary);
+
+  display: flex;
+  align-items: center;
+
+  &__data {
+    margin: 0 0 0 20px;
+  }
+}

@@ -47,11 +47,7 @@
   }
 
   &__description {
-    font-family: $ff-primary;
-    line-height: 1.1;
-    letter-spacing: 0.06em;
-    font-size: 15px;
-    color: $color-dark-l;
+    @include h5;
 
     margin: 0 0 20px 0;
 
