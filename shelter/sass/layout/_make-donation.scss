@@ -1,0 +1,76 @@
+.make-donation {
+  @include section-padding;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 1279px) {
+    flex-direction: column-reverse;
+  }
+
+  &__image {
+    @media screen and (max-width: 767px) {
+      max-width: 260px;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    max-width: 380px;
+    margin-left: 30px;
+
+    @media screen and (max-width: 1279px) {
+      margin-bottom: 60px;
+      margin-left: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+      max-width: 300px;
+      margin-bottom: 42px;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &__heading {
+    @include h3;
+
+    max-width: 300px;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 767px) {
+      max-width: 220px;
+      text-align: center;
+    }
+  }
+
+  &__description {
+    font-family: $ff-primary;
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    font-size: 15px;
+    color: $color-dark-l;
+
+    margin: 0 0 20px 0;
+
+    @media screen and (max-width: 767px) {
+      line-height: 1.6;
+      letter-spacing: 0;
+    }
+  }
+
+  &__button {
+    margin-bottom: 20px;
+  }
+
+  &__legal {
+    @include paragraph-s;
+
+    @media screen and (max-width: 767px) {
+      text-align: justify;
+      max-width: 93%;
+    }
+  }
+}
