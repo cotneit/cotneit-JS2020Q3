@@ -1,0 +1,119 @@
+:root {
+  font-size: 16px;
+  font-family: Roboto, 'Segoe UI', Tahoma, sans-serif;
+}
+
+@media screen and (max-width: 1100px) {
+  :root {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  :root {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  :root {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  :root {
+    font-size: 6px;
+  }
+}
+
+.app {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0 10px 10px 10px;
+
+  background: linear-gradient(rgba(0,0,0, 0.1), rgba(0,0,0, 0.1)), url(https://images.unsplash.com/photo-1503104538136-7491acef4d5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-clip: border-box;
+  overflow: hidden;
+  text-align: center;
+
+  color: #EEEEEE;
+}
+
+.app__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  word-wrap: break-word;
+
+  margin: 0 0 4.5rem 0;
+
+  line-height: 1.25;
+}
+
+.app__greeting {
+  font-size: 4rem;
+  margin: 0 0 4.5rem 0;
+  min-height: 1.5em;
+}
+
+.app__focus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2.5rem;
+}
+
+.time {
+  display: block;
+  font-size: 8rem;
+  line-height: 1;
+  margin: 0;
+}
+
+.date {
+  font-size: 4rem;
+}
+
+.name {
+  display: inline-block;
+  white-space: nowrap;
+  outline: none;
+  text-align: center;
+}
+
+.name:focus {
+  min-width: 5rem;
+  border-bottom: 0.3125rem solid #EEEEEE;
+}
+
+.focus-question {
+  margin: 0;
+  color: #CCCCCC;
+}
+
+.focus {
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+  min-width: 100%;
+  
+  font-size: 2.5rem;
+  min-height: 1.5em;
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+}
+
+.focus:focus {
+  border-bottom: 0.1875rem solid #EEEEEE;
+}
