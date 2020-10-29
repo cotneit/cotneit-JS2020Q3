@@ -1,3 +1,4 @@
+const app = document.querySelector('.app');
 const timeElement = document.querySelector('.time');
 const dateElement = document.querySelector('.date');
 const greetingElement = document.querySelector('.greeting');
@@ -20,25 +21,56 @@ function updateTime() {
   setTimeout(updateTime, 1000 - milliseconds);
 }
 
-function updateGreeting() {
-  const hours = today.getHours();
-  let greeting;
+function getTimeOfDay(date) {
+  const hours = date.getHours();
+  let timeOfDay;
 
   if (hours < 6) {
-    greeting = 'Good night, ';
+    timeOfDay = 'night';
   } else if (hours < 12) {
-    greeting = 'Good morning, ';
+    timeOfDay = 'morning';
   } else if (hours < 18) {
-    greeting = 'Good afternoon, ';
+    timeOfDay = 'afternoon';
   } else {
-    greeting = 'Good evening, ';
+    timeOfDay = 'evening';
   }
 
-  greetingElement.textContent = greeting;
+  return timeOfDay;
 }
 
-function upgradeBackground() {
+function updateGreeting() {
+  const greeting = `Good ${getTimeOfDay(today)}, `;
 
+  greetingElement.textContent = greeting;
+
+  setTimeout(updateGreeting, 60 * 60 * 1000 - today.getMilliseconds() - today.getSeconds() * 1000 - today.getMinutes() * 60 * 1000)
+}
+
+function appendZero(number) {
+  return +number > 9 ? `${number}` : `0${number}`;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * 20 + 1)
+}
+
+function updateBackground() {
+  const bgLog = JSON.parse(localStorage.getItem('bgLog')) || [];
+  let timeOfDay = getTimeOfDay(today);
+  let backgroundPath;
+
+  backgroundPath = `./images/${timeOfDay}/${appendZero(Math.floor(Math.random() * 20 + 1))}.jpg`;
+  app.style.backgroundImage = `url(${backgroundPath})`;
+
+  if (bgLog[bgLog.length - 1] !== backgroundPath) {
+    bgLog.push(backgroundPath);
+  }
+
+  localStorage.setItem('bgLog', JSON.stringify(bgLog));
+  
+  // setTimeout(updateBackground, 60 * 1000 - today.getMilliseconds() - today.getSeconds() * 1000)
+
+  setTimeout(updateBackground, 60 * 60 * 1000 - today.getMilliseconds() - today.getSeconds() * 1000 - today.getMinutes() * 60 * 1000);
 }
 
 function updateName(event) {
@@ -120,3 +152,4 @@ updateTime();
 updateGreeting();
 updateName();
 updateFocus();
+updateBackground();
