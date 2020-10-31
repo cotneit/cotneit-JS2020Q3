@@ -21,20 +21,22 @@
   }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 320px) {
   :root {
     font-size: 6px;
   }
 }
 
 .app {
+  position: relative;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
+  width: fit-content;
   margin: 0;
   padding: 0 10px 10px 10px;
 
@@ -44,7 +46,7 @@
   background-position: center;
   background-clip: border-box;
   transition: background-image 0.5s ease-in-out;
-  overflow: hidden;
+  overflow-x: hidden;
   text-align: center;
 
   color: #EEEEEE;
@@ -72,6 +74,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 0 4.5rem 0;
   font-size: 2.5rem;
 }
 
@@ -79,6 +82,13 @@
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.app__quote {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 10px;
+  border-radius: 10px;
+  min-width: 40%;
 }
 
 .time {
@@ -160,4 +170,29 @@
 
 .button--disabled:hover {
   transform: none;
+}
+
+.quote__quote {
+  display: block;
+  margin: 0 0 1.25rem 0;
+  font-size: 1.25rem;
+}
+
+.quote__inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.quote__button {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.quote__author {
+  margin: 0;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  min-width: 50%;
 }

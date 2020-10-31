@@ -6,6 +6,9 @@ const nameElement = document.querySelector('.name');
 const focusElement = document.querySelector('.focus');
 const buttonBgNext = document.querySelector('.button--bg-next');
 const buttonBgPrev = document.querySelector('.button--bg-prev');
+const quote = document.querySelector('.quote__quote');
+const quoteAuthor = document.querySelector('.quote__author');
+const buttonNewQuote = document.querySelector('.quote__button');
 
 function updateTime() {
   today = new Date();
@@ -150,8 +153,27 @@ function updateFocus(event) {
   localStorage.setItem('focus', focusElement.textContent);
 }
 
+async function loadQuotes() {
+  if (localStorage.getItem('quotes') === null) {
+    const url = 'https://type.fit/api/quotes';
+    const res = await fetch(url);
+    const data = await res.json();
+    localStorage.setItem('quotes', JSON.stringify(data));
+    quotes = data;
+    return;
+  }
+  quotes = JSON.parse(localStorage.getItem('quotes'));
+}
+
+function updateQuote() {
+  const randomQuote = quotes[getRandomInt(0, quotes.length - 1)];
+  quote.textContent = randomQuote.text;
+  quoteAuthor.textContent = randomQuote.author;
+}
+
 let today;
 let currentBackgroundIndex;
+let quotes;
 
 const dailyBackgroundImages = [];
 updateTime();
@@ -160,6 +182,11 @@ updateGreeting();
 updateName();
 updateFocus();
 updateBackgroundImage();
+
+(async () => {
+  await loadQuotes();
+  updateQuote();
+})();
 
 /* Name handlers */
 nameElement.addEventListener('keydown', (event) => {
@@ -171,8 +198,6 @@ nameElement.addEventListener('keydown', (event) => {
 
 nameElement.addEventListener('focus', (event) => {
   event.target.style.minWidth = `${event.target.clientWidth}px`;
-  console.log(event.target.clientWidth);
-  console.log(event.target.style.width)
   event.target.textContent = '';
 })
 
@@ -243,4 +268,8 @@ buttonBgNext.addEventListener('click', () => {
       buttonBgNext.classList.remove('button--disabled');
     }, 500)
   }
+})
+
+buttonNewQuote.addEventListener('click', () => {
+  updateQuote();
 })
