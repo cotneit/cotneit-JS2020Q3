@@ -189,7 +189,7 @@ async function updateWeather() {
     return;
   }
 
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=ce705e5566c6dfb9d6b2df26e5633ef4&units=metric&lang=en`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=ce705e5566c6dfb9d6b2df26e5633ef4&units=metric&lang=en`;
   try {
     const res = await fetch(url);
     const data = await res.json();
