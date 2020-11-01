@@ -9,6 +9,15 @@ const buttonBgPrev = document.querySelector('.button--bg-prev');
 const quote = document.querySelector('.quote__quote');
 const quoteAuthor = document.querySelector('.quote__author');
 const buttonNewQuote = document.querySelector('.quote__button');
+const cityElement = document.querySelector('.weather__city');
+const weatherElement = document.querySelector('.weather');
+const weatherIcon = document.querySelector('.weather__icon');
+const weatherTemperature = document.querySelector('.weather__temperature');
+const weatherHumidity = document.querySelector('.weather__humidity');
+const weatherWindSpeed = document.querySelector('.weather__wind-speed');
+const weatherInner = document.querySelector('.weather__inner');
+const weatherError = document.querySelector('.weather__error');
+
 
 function updateTime() {
   today = new Date();
@@ -171,6 +180,33 @@ function updateQuote() {
   quoteAuthor.textContent = randomQuote.author;
 }
 
+async function updateWeather() {
+  const city = localStorage.getItem('city'); 
+  if (city !== null) {
+    cityElement.textContent = city;
+  } else {
+    weatherElement.classList.add('weather--inactive');
+    return;
+  }
+
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=ce705e5566c6dfb9d6b2df26e5633ef4&units=metric&lang=en`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    weatherIcon.className = `weather__icon owf owf-${data.weather[0].id} owf-3x owf-border`
+    weatherTemperature.textContent = data.main.temp;
+    weatherHumidity.textContent = data.main.humidity;
+    weatherWindSpeed.textContent = data.wind.speed;
+    weatherElement.classList.remove('weather--inactive');
+    weatherError.classList.remove('weather__error--visible');
+    console.log(data);
+  } catch (e) {
+    console.log('Error!')
+    weatherElement.classList.add('weather--inactive');
+    weatherError.classList.add('weather__error--visible');
+  }
+}
+
 let today;
 let currentBackgroundIndex;
 let quotes;
@@ -182,6 +218,7 @@ updateGreeting();
 updateName();
 updateFocus();
 updateBackgroundImage();
+updateWeather();
 
 (async () => {
   await loadQuotes();
@@ -191,7 +228,6 @@ updateBackgroundImage();
 /* Name handlers */
 nameElement.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
-    updateName(event);
     event.target.blur();
   }
 })
@@ -208,7 +244,6 @@ nameElement.addEventListener('blur', (event) => {
 /* Focus handlers */
 focusElement.addEventListener('keydown', (event) => {
   if (event.key === 'Enter') {
-    updateFocus(event);
     event.target.blur();
   }
 })
@@ -219,6 +254,35 @@ focusElement.addEventListener('focus', (event) => {
 
 focusElement.addEventListener('blur', (event) => {
   updateFocus(event);
+})
+
+/* City handlers */
+cityElement.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.target.blur();
+  }
+})
+
+cityElement.addEventListener('focus', (event) => {
+  event.target.style.minWidth = `${event.target.clientWidth}px`;
+  event.target.textContent = '';
+})
+
+cityElement.addEventListener('blur', () => {
+  if (cityElement.textContent === localStorage.getItem('city')) {
+    return;
+  }
+
+  cityElement.style.minWidth = '';
+
+  if (cityElement.textContent.trim() === '') {
+    cityElement.textContent = localStorage.getItem('city');
+    return;
+  }
+
+  localStorage.setItem('city', cityElement.textContent.trim());
+  updateWeather();
+  weatherInner.classList.remove('.weather--inactive');
 })
 
 /* Background controls */

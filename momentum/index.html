@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Momentum</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/owfont-regular.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="app">
@@ -19,6 +20,18 @@
   <div class="app__focus">
     <p class="focus-question">What is your main focus for today?</p>
     <p class="focus" spellcheck="false" contenteditable="true">[Enter your focus]</p>
+  </div>
+  <div class="weather weather--inactive app__weather">
+    <p class="weather__item">Weather in <span class="weather__city" contenteditable="true" spellcheck="false"></span>:</p>
+    <p class="weather__error">Unable to retrieve weather data for the given city.</p>
+    <div class="weather__inner">
+      <i class="weather__icon owf owf-800 owf-3x owf-border"></i>
+      <div class="weather__items">
+        <p class="weather__item">Temperature: <span class="weather__temperature"></span>&deg;C</p>
+        <p class="weather__item">Humidity: <span class="weather__humidity"></span>%</p>
+        <p class="weather__item">Wind speed: <span class="weather__wind-speed"></span>m/s</p>
+      </div>
+    </div>
   </div>
   <div class="app__background-controls">
     <button class="button button--bg-prev">Prev</button>
