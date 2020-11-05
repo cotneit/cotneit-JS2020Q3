@@ -1,0 +1,105 @@
+:root {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 810px) {
+  :root {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 610px) {
+  :root {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 510px) {
+  :root {
+    font-size: 8px;
+  }
+}
+
+.page {
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.page__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f1f6f9;
+}
+
+.textarea {
+  width: 25%;
+  /* height: 50%; */
+  resize: none;
+  outline: none;
+  border: none;
+}
+
+.keyboard {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100vw;
+  padding: 2rem;
+  background-color: #9ba4b4;
+}
+
+.keyboard--hidden {
+  bottom: -100%;
+}
+
+.keyboard__keys {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  flex-wrap: wrap;
+  height: 100%;
+  margin: -2px 0 0 -2px;
+}
+
+.keyboard__keys-row {
+  display: flex;
+}
+
+.keyboard__key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #394867;
+  outline: none;
+  border: none;
+  color: #EEEEEE;
+  min-height: 3.125rem;
+  min-width: 3.125rem;
+  font-size: 1.3rem;
+  margin: 2px 0 0 2px;
+  transition: background-color 0.1s
+}
+
+.keyboard__key--active {
+  background-color: #14274e;
+}
+
+.keyboard__key--down {
+  background-color: #14274e;
+}
+
+.keyboard__key--span {
+  flex-grow: 1;
+}
