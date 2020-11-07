@@ -309,6 +309,7 @@ const Keyboard = {
   open(target) {
     this.properties.target = target;
     this.elements.keyboard.classList.remove('keyboard--hidden');
+    document.body.style.paddingBottom = `${this.elements.keyboard.offsetHeight}px`;
   },
 
   close() {
