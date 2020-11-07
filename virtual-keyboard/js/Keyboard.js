@@ -181,26 +181,30 @@ const Keyboard = {
     }
 
     // TODO: refactor this, store event handlers.
-    // Also, redirecting all the keyboard events to mouse handlers may not have been a good idea.
-    // Maybe handle just visual interactions here.
-    document.body.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', (event) => {
       const keyElement = this.elements.keys[event.code];
       const simulatedEvent = new NewMouseEvent('mousedown', {
         repeat: event.repeat
       });
 
       if (keyElement) {
+        switch (event.code) {
+          case 'ArrowUp':
+          case 'ArrowDown':
+            break;
+          default:
+            event.preventDefault();
+            break;
+        }
         keyElement.dispatchEvent(simulatedEvent);
-        event.preventDefault();
       }
     });
 
-    document.body.addEventListener('keyup', (event) => {
+    document.addEventListener('keyup', (event) => {
       const keyElement = this.elements.keys[event.code];
       const simulatedEvent = new MouseEvent('mouseup');
 
       if (keyElement) {
-        keyElement.dispatchEvent(simulatedEvent);
         switch (event.code) {
           case undefined:
             break;
@@ -210,9 +214,10 @@ const Keyboard = {
             break;
           default:
             break;
-          }
+        }
+        keyElement.dispatchEvent(simulatedEvent);
+        event.preventDefault();
       }
-      event.preventDefault();
     });
 
     this.layout.flat().forEach((key) => {
@@ -220,17 +225,26 @@ const Keyboard = {
       const keyChar = this.languages[this.properties.language][key];
 
       keyElement.addEventListener('mousedown', (event) => {
+        const target = this.properties.target;
+        
+        if (event.button !== 0) {
+          return;
+        }
+
         keyElement.classList.add('keyboard__key--down');
+        target.focus();
 
         switch (key) {
           case 'Space':
-            this.properties.target.value += ' ';
+            target.setRangeText(' ', target.selectionStart, target.selectionEnd, 'end');
             break;
           case 'Backspace':
-            this.properties.target.value = this.properties.target.value.slice(0, -1);
+            if (target.value.length > 0) {
+              target.setRangeText('', target.selectionStart - 1, target.selectionEnd, 'end');
+            }
             break;
           case 'Enter':
-            this.properties.target.value += '\n';
+            target.setRangeText('\n', target.selectionStart, target.selectionEnd, 'end');
             break;
           case 'ShiftLeft':
           case 'ShiftRight':
@@ -248,11 +262,15 @@ const Keyboard = {
           case 'ArrowDown':
             break;
           case 'ArrowLeft':
+            target.selectionStart = target.selectionStart - 1;
+            target.selectionEnd = target.selectionStart;
             break;
           case 'ArrowRight':
+            target.selectionStart = target.selectionStart + 1;
+            target.selectionEnd = target.selectionStart;
             break;
           case 'Tab':
-            this.properties.target.value += '\t'
+            target.setRangeText('\t', target.selectionStart, target.selectionEnd, 'end');
             break;
           case 'ControlLeft':
           case 'ControlRight':
@@ -267,25 +285,34 @@ const Keyboard = {
           case 'KeyboardHide':
             break;
           default:
-            this.properties.target.value += keyElement.textContent;
+            target.setRangeText(keyElement.textContent, target.selectionStart, target.selectionEnd, 'end');
             break;
         }
       })
 
-      // Assign the same function to 'mouseout' event
       keyElement.addEventListener('mouseup', (event) => {
+        const target = this.properties.target;
+        
+        if (event.button !== 0) {
+          return;
+        }
+        
         switch (key) {
           case 'KeyboardHide':
             this.close();
             break;
-          case 'ShiftLeft':
-          case 'ShiftRight':
-            break;
           default:
+            target.focus();
             break;
-          }
-          keyElement.classList.remove('keyboard__key--down');
+        }
+
+        keyElement.classList.remove('keyboard__key--down');
       })
+
+      keyElement.addEventListener('mouseout', () => {
+        keyElement.classList.remove('keyboard__key--down');
+      })
+
     })
   },
 
