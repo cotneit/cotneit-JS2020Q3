@@ -1,3 +1,5 @@
+'use strict'
+
 const Keyboard = {
   languages: {
     en: {
@@ -150,26 +152,6 @@ const Keyboard = {
     
   },
 
-  applyVisualLayout(key) {
-    keyElement = this.elements.keys[key];
-
-    switch (key) {
-      case 'KeyboardChangeLanguage':
-        keyElement.textContent = this.properties.language;
-        break;
-      case 'ControlLeft':
-      case 'ControlRight':
-        keyElement.textContent = 'Ctrl';
-        break;
-      case 'AltLeft':
-      case 'AltRight':
-        keyElement.textContent = 'Alt';
-        break;
-      default:
-        break;
-    }
-  },
-
   init() {
     // Create main elements
     this.elements.keyboard = document.createElement('div');
@@ -186,7 +168,7 @@ const Keyboard = {
 
     // Attach keyboard to elements
     document.querySelectorAll('.use-virtual-keyboard').forEach((element) => {
-      element.addEventListener('focus', (event) => {
+      element.addEventListener('focus', () => {
         this.open(element);
       })
     });
@@ -290,6 +272,7 @@ const Keyboard = {
         }
       })
 
+      // Assign the same function to 'mouseout' event
       keyElement.addEventListener('mouseup', (event) => {
         switch (key) {
           case 'KeyboardHide':
@@ -309,30 +292,26 @@ const Keyboard = {
   open(target) {
     this.properties.target = target;
     this.elements.keyboard.classList.remove('keyboard--hidden');
+    document.body.style.paddingBottom = `${this.elements.keyboard.offsetHeight}px`;
   },
 
   close() {
     this.elements.keyboard.classList.add('keyboard--hidden');
     this.properties.target = undefined;
+    document.body.style.paddingBottom = '';
   },
 
-  createKey(key, language = 'en') {
+  createKey(key) {
     const keyElement = document.createElement('button');
     const iconName = this.keyIconNames[key];
     
     if (iconName) {
       keyElement.append(this.createIcon(iconName));
-    } else {
-      const keyContent = this.languages[language][key] ? this.languages[language][key][0] : key;
-      const keyText = document.createTextNode(keyContent);
-      keyElement.append(keyText);
     }
-
     
     keyElement.type = 'button';
     keyElement.className = 'keyboard__key';
     this.elements.keys[key] = keyElement;
-    this.applyVisualLayout(key);
 
     switch (key) {
       case 'Backspace':
@@ -367,14 +346,14 @@ const Keyboard = {
       fragment.append(row);
     });
 
+    this.updateVisualLayout();
     return fragment;
   },
 
   createIcon(iconName) {
     const iconElement = document.createElement('i');
-    const iconText = document.createTextNode(iconName);
-    iconElement.className = 'material-icons'
-    iconElement.append(iconText);
+    iconElement.className = 'material-icons';
+    iconElement.textContent = iconName;
     return iconElement;
   },
 
@@ -382,42 +361,23 @@ const Keyboard = {
     this.properties.language = language;
     this.elements.keys['KeyboardChangeLanguage'].textContent = language;
 
-    this.layout.flat().forEach((key) => {
-      const iconName = this.keyIconNames[key];
-    
-      if (!iconName && this.languages[language][key]) {
-        this.elements.keys[key].textContent = this.languages[language][key][0];
-      }
-    })
+    this.updateVisualLayout();
   },
 
   toggleCaps() {
-    const language = this.properties.language;
     const capsLock = this.elements.keys['CapsLock'];
     this.properties.capsLock = !this.properties.capsLock;
+
     if (this.properties.capsLock) {
       capsLock.classList.add('keyboard__key--active');
     } else {
       capsLock.classList.remove('keyboard__key--active');
     }
 
-    this.layout.flat().forEach((key) => {
-      const iconName = this.keyIconNames[key];
-
-      if (!iconName) {
-        if (this.properties.capsLock) {
-          this.elements.keys[key].textContent = this.languages[language][key] ? this.languages[language][key][0].toUpperCase() : key;
-        } else {
-          this.elements.keys[key].textContent = this.languages[language][key] ? this.languages[language][key][0].toLowerCase() : key;
-        }
-      }
-
-      this.applyVisualLayout(key);
-    })
+    this.updateVisualLayout();
   },
 
   toggleShift() {
-    const language = this.properties.language;
     const shiftLeft = this.elements.keys['ShiftRight'];
     const shiftRight = this.elements.keys['ShiftLeft'];
     this.properties.shift = !this.properties.shift;
@@ -430,10 +390,35 @@ const Keyboard = {
       shiftRight && shiftRight.classList.remove('keyboard__key--active');
     }
 
+    this.updateVisualLayout();
+  },
+
+  applySpecialVisualLayout(key) {
+    const keyElement = this.elements.keys[key];
+
+    switch (key) {
+      case 'KeyboardChangeLanguage':
+        keyElement.textContent = this.properties.language;
+        break;
+      case 'ControlLeft':
+      case 'ControlRight':
+        keyElement.textContent = 'Ctrl';
+        break;
+      case 'AltLeft':
+      case 'AltRight':
+        keyElement.textContent = 'Alt';
+        break;
+      default:
+        break;
+    }
+  },
+
+  updateVisualLayout() {
+    const language = this.properties.language;
+
     this.layout.flat().forEach((key) => {
       const iconName = this.keyIconNames[key];
 
-      // TODO: Put it into separate function and call each time symbols change (ex. caps, language change) to eliminate bugs
       if (!iconName) {
         if (this.properties.capsLock && this.properties.shift) {
           this.elements.keys[key].textContent = this.languages[language][key] ? this.languages[language][key][1] || this.languages[language][key][0].toLowerCase() : key;
@@ -446,9 +431,9 @@ const Keyboard = {
         }
       }
 
-      this.applyVisualLayout(key);
+      this.applySpecialVisualLayout(key);
     })
-  },
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
