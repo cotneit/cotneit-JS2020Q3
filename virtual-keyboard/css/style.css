@@ -77,6 +77,7 @@
   flex-wrap: wrap;
   height: 100%;
   margin: -2px 0 0 -2px;
+  user-select: none;
 }
 
 .keyboard__keys-row {
