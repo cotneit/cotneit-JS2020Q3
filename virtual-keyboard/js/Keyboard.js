@@ -113,7 +113,7 @@ const Keyboard = {
     ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash'],
     ['CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
     ['ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', ''],
-    ['ControlLeft', 'KeyboardChangeLanguage', 'KeyboardHide', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight']
+    ['ControlLeft', 'KeyboardChangeLanguage', 'KeyboardHide', 'KeyboardToggleSound', 'Space', 'ArrowLeft', 'ArrowDown', 'ArrowRight']
   ],
 
   keyIconNames: {
@@ -133,13 +133,16 @@ const Keyboard = {
     'ArrowRight': 'keyboard_arrow_right',
 
     'KeyboardHide': 'keyboard_hide',
+    'KeyboardToggleSound': 'volume_up',     // alt: volume_off
+    'KeyboardToggleVoiceInput': 'mic_off'   // alt: mic
   },
 
   properties: {
     language: 'en',
     capsLock: false,
     shift: false,
-    target: undefined
+    target: undefined,
+    muted: false
   },
 
   elements: {
@@ -232,6 +235,9 @@ const Keyboard = {
         }
 
         keyElement.classList.add('keyboard__key--down');
+        if (!event.repeat && !this.properties.muted) {
+          this.playKeySound(key);
+        }
         target.focus();
 
         switch (key) {
@@ -239,7 +245,9 @@ const Keyboard = {
             target.setRangeText(' ', target.selectionStart, target.selectionEnd, 'end');
             break;
           case 'Backspace':
-            if (target.value.length > 0) {
+            if (target.selectionStart !== target.selectionEnd) {
+              target.setRangeText('');
+            } else if (target.value.length > 0) {
               target.setRangeText('', target.selectionStart - 1, target.selectionEnd, 'end');
             }
             break;
@@ -283,6 +291,13 @@ const Keyboard = {
             this.changeLanguage(this.properties.language);
             break;
           case 'KeyboardHide':
+            break;
+          case 'KeyboardToggleSound':
+            if (!event.repeat) {
+              this.properties.muted = !this.properties.muted;
+              const newIconName = this.properties.muted ? 'volume_off' : 'volume_up';
+              keyElement.querySelector('.material-icons').replaceWith(this.createIcon(newIconName));
+            }
             break;
           default:
             target.setRangeText(keyElement.textContent, target.selectionStart, target.selectionEnd, 'end');
@@ -460,6 +475,34 @@ const Keyboard = {
 
       this.applySpecialVisualLayout(key);
     })
+  },
+
+  playKeySound(key) {
+    switch(key) {
+      case 'Space':
+        new Audio('./assets/sounds/keyboard_spacebar.mp3').play();
+        break;
+      case 'ShiftLeft':
+      case 'ShiftRight':
+        new Audio('./assets/sounds/keyboard_shift.mp3').play();
+        break;
+      case 'Backspace':
+        new Audio('./assets/sounds/keyboard_backspace.mp3').play();
+        break;
+      case 'Enter':
+        new Audio('./assets/sounds/keyboard_enter.mp3').play();
+        break;
+      case 'CapsLock':
+        new Audio('./assets/sounds/keyboard_capslock.mp3').play();
+        break;
+      default:
+        if (this.properties.language === 'en') {
+          new Audio('./assets/sounds/keyboard_keystroke_en.mp3').play();
+        } else if (this.properties.language === 'ru') {
+          new Audio('./assets/sounds/keyboard_keystroke_ru.mp3').play();
+        }
+        break;
+    }
   }
 }
 
