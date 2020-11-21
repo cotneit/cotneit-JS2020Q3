@@ -40,6 +40,14 @@ module.exports = {
           'css-loader',
         ],
       },
+      {
+        test: /\.mp3$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: './assets/audio/',
+        },
+      },
     ],
   },
 };

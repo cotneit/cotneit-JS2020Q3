@@ -1,5 +1,6 @@
 import './style.css';
 import Timer from './Timer';
+import tileMoveSound from './assets/audio/tile-move.mp3';
 
 export default class GemPuzzle {
   constructor() {
@@ -28,11 +29,13 @@ export default class GemPuzzle {
     });
 
     this.eventListeners = {
-      tileOnclick: (event) => {
+      tileOnClick: (event) => {
         const { tiles, size } = this.state;
         const index = tiles.map((tile) => tile.element).indexOf(event.target);
+        const tile = event.target;
+        const gapSize = 2;
 
-        if (this.state.isSolved) {
+        if (this.state.isSolved || this.isTransitioning) {
           return;
         }
 
@@ -44,25 +47,42 @@ export default class GemPuzzle {
           case tiles[index - 1] && tiles[index - 1].id === -1 && index % size !== 0:
             [tiles[index], tiles[index - 1]] = [tiles[index - 1], tiles[index]];
             this.stateProxy.moves += 1;
+            tile.style.transform = `translateX(-100%) translateX(-${gapSize}px)`;
             break;
           case tiles[index + 1] && tiles[index + 1].id === -1 && index % size !== size - 1:
             [tiles[index], tiles[index + 1]] = [tiles[index + 1], tiles[index]];
             this.stateProxy.moves += 1;
+            tile.style.transform = `translateX(100%) translateX(${gapSize}px)`;
             break;
           case tiles[index - size] && tiles[index - size].id === -1:
             [tiles[index], tiles[index - size]] = [tiles[index - size], tiles[index]];
             this.stateProxy.moves += 1;
+            tile.style.transform = `translateY(-100%) translateY(-${gapSize}px)`;
             break;
           case tiles[index + size] && tiles[index + size].id === -1:
             [tiles[index], tiles[index + size]] = [tiles[index + size], tiles[index]];
             this.stateProxy.moves += 1;
+            tile.style.transform = `translateY(100%) translateY(${gapSize}px)`;
             break;
           default:
             break;
         }
-        this.renderTiles();
-        this.checkState();
       },
+
+      tileOnTransitionStart: (event) => {
+        if (event.propertyName === 'transform') {
+          this.isTransitioning = true;
+          new Audio(tileMoveSound).play();
+        }
+      },
+
+      tileOnTransitionEnd: (event) => {
+        if (event.propertyName === 'transform') {
+          this.renderTiles();
+          this.checkState();
+        }
+      },
+
     };
   }
 
@@ -98,7 +118,9 @@ export default class GemPuzzle {
       tile.element.textContent = tile.id;
       tiles.push(tile);
 
-      tile.element.addEventListener('click', this.eventListeners.tileOnclick);
+      tile.element.addEventListener('click', this.eventListeners.tileOnClick);
+      tile.element.addEventListener('transitionstart', this.eventListeners.tileOnTransitionStart);
+      tile.element.addEventListener('transitionend', this.eventListeners.tileOnTransitionEnd);
     }
 
     tiles.push(emptyTile);
@@ -108,27 +130,12 @@ export default class GemPuzzle {
   renderTiles() {
     const { tiles } = this.state;
     tiles.forEach((tile) => {
+      // eslint-disable-next-line no-param-reassign
+      tile.element.style.transform = '';
       this.elements.board.append(tile.element);
+      this.isTransitioning = false;
     });
   }
-
-  // moveTile(tileIndex1, tileIndex2) {
-  //   const tiles = this.state.tiles;
-  //   const nextSibling = tile2.nextSibling;
-  //   const prevSibling = tile2.previousSibling;
-  //   const parent = tile2.parentElement;
-  //   tile1.replaceWith(tile2);
-
-  //   if (nextSibling) {
-  //     nextSibling.before(tile1);
-  //   } else if (prevSibling) {
-  //     prevSibling.after(tile1);
-  //   } else {
-  //     parent.append(tile1);
-  //   }
-
-  //   [tiles[i], tiles[i - 1]] = [tiles[i - 1], tiles[i]];
-  // }
 
   checkState() {
     const tileIds = this.state.tiles.map((tile) => tile.id);
