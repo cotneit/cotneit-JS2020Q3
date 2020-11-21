@@ -25,6 +25,7 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
       title: 'Gem puzzle',
+      favicon: './src/favicon.ico',
       meta: {
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
       },
