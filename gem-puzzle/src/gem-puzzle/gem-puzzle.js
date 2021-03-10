@@ -35,7 +35,10 @@ export default class GemPuzzle {
         const tile = event.target;
         const gapSize = 2;
 
-        if (this.state.isSolved || this.isTransitioning) {
+        if (this.isTransitioning
+          || this.state.isSolved
+          || tiles[index]?.id === -1
+          || index === -1) {
           return;
         }
 
@@ -43,30 +46,51 @@ export default class GemPuzzle {
           this.timer.start();
         }
 
-        switch (true) {
-          case tiles[index - 1] && tiles[index - 1].id === -1 && index % size !== 0:
-            [tiles[index], tiles[index - 1]] = [tiles[index - 1], tiles[index]];
-            this.stateProxy.moves += 1;
-            tile.style.transform = `translateX(-100%) translateX(-${gapSize}px)`;
-            break;
-          case tiles[index + 1] && tiles[index + 1].id === -1 && index % size !== size - 1:
-            [tiles[index], tiles[index + 1]] = [tiles[index + 1], tiles[index]];
-            this.stateProxy.moves += 1;
-            tile.style.transform = `translateX(100%) translateX(${gapSize}px)`;
-            break;
-          case tiles[index - size] && tiles[index - size].id === -1:
-            [tiles[index], tiles[index - size]] = [tiles[index - size], tiles[index]];
-            this.stateProxy.moves += 1;
-            tile.style.transform = `translateY(-100%) translateY(-${gapSize}px)`;
-            break;
-          case tiles[index + size] && tiles[index + size].id === -1:
-            [tiles[index], tiles[index + size]] = [tiles[index + size], tiles[index]];
-            this.stateProxy.moves += 1;
-            tile.style.transform = `translateY(100%) translateY(${gapSize}px)`;
-            break;
-          default:
-            break;
-        }
+        const getEmptyTileDirection = () => {
+          switch (true) {
+            case tiles[index - 1]?.id === -1 && index % size !== 0:
+              return 'left';
+            case tiles[index + 1]?.id === -1 && index % size !== size - 1:
+              return 'right';
+            case tiles[index - size]?.id === -1:
+              return 'top';
+            case tiles[index + size]?.id === -1:
+              return 'bottom';
+            default:
+              return false;
+          }
+        };
+
+        const moveTile = (direction) => {
+          switch (direction) {
+            case false:
+              break;
+            case 'left':
+              [tiles[index], tiles[index - 1]] = [tiles[index - 1], tiles[index]];
+              tile.style.transform = `translateX(-100%) translateX(-${gapSize}px)`;
+              this.stateProxy.moves += 1;
+              break;
+            case 'right':
+              [tiles[index], tiles[index + 1]] = [tiles[index + 1], tiles[index]];
+              tile.style.transform = `translateX(100%) translateX(${gapSize}px)`;
+              this.stateProxy.moves += 1;
+              break;
+            case 'top':
+              [tiles[index], tiles[index - size]] = [tiles[index - size], tiles[index]];
+              tile.style.transform = `translateY(-100%) translateY(-${gapSize}px)`;
+              this.stateProxy.moves += 1;
+              break;
+            case 'bottom':
+              [tiles[index], tiles[index + size]] = [tiles[index + size], tiles[index]];
+              tile.style.transform = `translateY(100%) translateY(${gapSize}px)`;
+              this.stateProxy.moves += 1;
+              break;
+            default:
+              throw new Error(`Invalid argument '${direction}'`);
+          }
+        };
+
+        moveTile(getEmptyTileDirection());
       },
 
       tileOnTransitionStart: (event) => {
@@ -117,10 +141,6 @@ export default class GemPuzzle {
       tile.element.classList.add('gem-puzzle__tile');
       tile.element.textContent = tile.id;
       tiles.push(tile);
-
-      tile.element.addEventListener('click', this.eventListeners.tileOnClick);
-      tile.element.addEventListener('transitionstart', this.eventListeners.tileOnTransitionStart);
-      tile.element.addEventListener('transitionend', this.eventListeners.tileOnTransitionEnd);
     }
 
     tiles.push(emptyTile);
@@ -129,12 +149,16 @@ export default class GemPuzzle {
 
   renderTiles() {
     const { tiles } = this.state;
+    const tileContainer = document.createDocumentFragment();
+
     tiles.forEach((tile) => {
       // eslint-disable-next-line no-param-reassign
       tile.element.style.transform = '';
-      this.elements.board.append(tile.element);
-      this.isTransitioning = false;
+      tileContainer.append(tile.element);
     });
+
+    this.elements.board.append(tileContainer);
+    this.isTransitioning = false;
   }
 
   checkState() {
@@ -151,7 +175,7 @@ export default class GemPuzzle {
 
     // setTimeout to fire alert once the event loop is empty
     setTimeout(() => {
-      alert(`You solved the puzzle in ${this.timer.getTime()} and made ${this.state.moves} moves.\nSorry for the alert, work in progress.`);
+      alert(`You solved the puzzle in ${this.timer.getTime()} and made ${this.state.moves} moves.`);
     }, 0);
   }
 
@@ -216,6 +240,9 @@ export default class GemPuzzle {
     statusBar.classList.add('gem-puzzle__status-bar');
     board.classList.add('gem-puzzle__board');
     board.style.gridTemplateColumns = `repeat(${this.state.size}, 1fr)`;
+    board.addEventListener('click', this.eventListeners.tileOnClick);
+    board.addEventListener('transitionstart', this.eventListeners.tileOnTransitionStart);
+    board.addEventListener('transitionend', this.eventListeners.tileOnTransitionEnd);
 
     // Timer setup
     timer.textContent = 'Timer: ';
